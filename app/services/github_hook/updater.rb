@@ -153,15 +153,18 @@ module GithubHook
     end
 
     # Fetches updates from the remote repository
+    # Only the content merged into the master branch is targeted.
     def update_repository(repository)
-      command = git_command("fetch origin")
+      command = git_command("fetch origin 'refs/heads/master:refs/heads/master'")
       fetch = exec(command, repository.url)
       return nil unless fetch
 
       command = git_command(
-        "fetch --prune --prune-tags origin \"+refs/heads/*:refs/heads/*\""
+        "fetch origin 'refs/heads/master:refs/heads/master'"
       )
       exec(command, repository.url)
     end
   end
 end
+
+
